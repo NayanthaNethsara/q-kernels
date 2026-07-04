@@ -1,9 +1,12 @@
+import os
 import torch
 from transformers import GPT2Model, GPT2Tokenizer
 
 modelName = "gpt2"
-tokenizer = GPT2Tokenizer.from_pretrained(modelName)
-languageModel = GPT2Model.from_pretrained(modelName, torch_dtype=torch.float16)
+huggingFaceToken = os.environ.get("HF_TOKEN", None)
+
+tokenizer = GPT2Tokenizer.from_pretrained(modelName, token=huggingFaceToken)
+languageModel = GPT2Model.from_pretrained(modelName, torch_dtype=torch.float16, token=huggingFaceToken)
 
 inputText = "Parallel computing optimizes systems."
 tokenizedInput = tokenizer(inputText, return_tensors="pt")
