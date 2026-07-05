@@ -77,3 +77,6 @@ __pycache__/
 
 # Environments
 .env
+
+# Downloaded model weights
+models/

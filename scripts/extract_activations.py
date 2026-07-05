@@ -5,8 +5,13 @@ from transformers import GPT2Model, GPT2Tokenizer
 modelName = "gpt2"
 huggingFaceToken = os.environ.get("HF_TOKEN", None)
 
-tokenizer = GPT2Tokenizer.from_pretrained(modelName, token=huggingFaceToken)
-languageModel = GPT2Model.from_pretrained(modelName, torch_dtype=torch.float16, token=huggingFaceToken)
+# Prefer a local copy (run scripts/download_model.py once); fall back to the Hub
+repoRoot = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+localModelDir = os.path.join(repoRoot, "models", modelName)
+modelSource = localModelDir if os.path.isdir(localModelDir) else modelName
+
+tokenizer = GPT2Tokenizer.from_pretrained(modelSource, token=huggingFaceToken)
+languageModel = GPT2Model.from_pretrained(modelSource, torch_dtype=torch.float16, token=huggingFaceToken)
 
 inputText = "Parallel computing optimizes systems."
 tokenizedInput = tokenizer(inputText, return_tensors="pt")
